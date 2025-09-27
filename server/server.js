@@ -1,10 +1,35 @@
 import express from "express";
 import cors from "cors";
+import pkg from "pg";
+import authRoutes from "./routes/auth.js";
 
 const app = express();
+const { Pool } = pkg;
 app.use(cors());
+app.use(express.json());
+app.use("/auth", authRoutes);
 const PORT = 5000;
 
-app.listen(PORT, () => {
-    console.log(`Сервер работает на http://localhost:${PORT}`);
+export const pool = new Pool({
+    user: "postgres",
+    host: "localhost",
+    database: "learnprogamixas",
+    password: "superparol",
+    port: 5432,
 });
+
+const StartServer = async () => {
+    try {
+        await pool.connect();
+        console.log("Успешное подключение к базе данных!");
+        
+        app.listen(PORT, () => {
+            console.log(`Сервер запущен на порту ${PORT}`);
+        });
+    } catch (error) {
+        console.error("Ошибка подключения к базе данных: ", error);
+        process.exit(1);
+    }
+};
+
+StartServer();
