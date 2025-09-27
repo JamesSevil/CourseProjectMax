@@ -1,1 +1,1 @@
-# CourseProjectMax
+# Максику
