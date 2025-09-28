@@ -37,4 +37,60 @@ router.post("/login", async (req, res) => {
     }
 });
 
+router.put("/data", async (req, res) => {
+    const {login, name, surname} = req.body;
+
+    try {
+        const result = await pool.query(
+            `SELECT * FROM users WHERE login = $1`,
+            [login]
+        );
+        if (result.rows.length === 0) {
+            return res.status(404).json({success: false, message: "Пользователь не найден в базе данных!"});
+        }
+
+        await pool.query(
+            `UPDATE users
+            SET name = $1, surname = $2
+            WHERE login = $3`,
+            [name, surname, login]
+        );
+        res.status(200).json({success: true, message: "Упешное обновление данных!"});
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({success: false, message: "Ошибка сервера!"});
+    }
+});
+
+router.put("/pass", async (req, res) => {
+    const {login, oldPassword, newPassword} = req.body;
+
+    try {
+        const result = await pool.query(
+            `SELECT * FROM users WHERE login = $1`,
+            [login]
+        );
+        if (result.rows.length === 0) {
+            return res.status(404).json({success: false, message: "Пользователь не найден в базе данных!"});
+        }
+
+        const checkPassword = await bcrypt.compare(oldPassword, result.rows[0].password);
+        if (!checkPassword) {
+            return res.status(403).json({success: false, message: "Старый пароль неверный!"});
+        }
+        const hashedNewPassword = await bcrypt.hash(newPassword, 10);
+        await pool.query(
+            `UPDATE users
+            SET password = $1
+            WHERE login = $2`,
+            [hashedNewPassword, login]
+        );
+
+        res.status(200).json({success: true, message: "Пароль успешно обновлён!"});
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({success: false, message: "Ошибка сервера!"});
+    }
+});
+
 export default router;
