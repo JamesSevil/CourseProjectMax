@@ -34,16 +34,16 @@ const Profile = () => {
         if (nameLabel === name && surnameLabel === surname) {
             alert("Не внесены изменения!");
             return;
-        } else if (nameLabel.length < 1 || nameLabel.length > 20) {
+        } else if (nameLabel.length < 2 || nameLabel.length > 20) {
             alert("Имя должно содержать от 2 до 20 символов!");
             return;
-        } else if (surnameLabel.length < 1 || surnameLabel.length > 20) {
+        } else if (surnameLabel.length < 2 || surnameLabel.length > 20) {
             alert("Фамилия должна содержать от 2 до 20 символов!");
             return;
         }
 
         try {
-            const response = await axios.put("http://localhost:5000/auth/data", {
+            const response = await axios.put("http://localhost:5000/users/data", {
                 login: login,
                 name: nameLabel,
                 surname: surnameLabel
@@ -84,7 +84,7 @@ const Profile = () => {
         }
 
         try {
-            const response = await axios.put("http://localhost:5000/auth/pass", {
+            const response = await axios.put("http://localhost:5000/users/pass", {
                 login: login,
                 oldPassword: oldPassword,
                 newPassword: newPassword
