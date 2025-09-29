@@ -34,6 +34,7 @@ const Home = () => {
                 {isOpen && (
                     <div>
                         {role === "Администратор" && (<><button onClick={() => navigate("/users")}>Управление пользователями</button><br/></>)}
+                        {(role === "Администратор" || role === "Преподаватель") && (<><button onClick={() => navigate("/lectures")}>Управление лекциями</button><br/></>)}
                         <button onClick={() => {
                             setIsOpen(false);
                             navigate("/profile");

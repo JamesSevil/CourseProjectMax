@@ -3,6 +3,7 @@ import Home from "./pages/Home";
 import Login from "./pages/Login";
 import Profile from "./pages/Profile";
 import Users from "./pages/Users";
+import Lectures from "./pages/Lectures";
 import PrivateRoute from "./PrivateRoute";
 
 const App = () => {
@@ -12,7 +13,8 @@ const App = () => {
                 <Route path="/login" element={<Login/>}/>
                 <Route path="/" element={<PrivateRoute><Home/></PrivateRoute>}/>
                 <Route path="/profile" element={<PrivateRoute><Profile/></PrivateRoute>}/>
-                <Route path="/users" element={<PrivateRoute><Users/></PrivateRoute>}/>
+                <Route path="/users" element={<PrivateRoute roles={"Администратор"}><Users/></PrivateRoute>}/>
+                <Route path="/lectures" element={<PrivateRoute roles={["Администратор", "Преподаватель"]}><Lectures/></PrivateRoute>}/>
             </Routes>
         </Router>
     );
