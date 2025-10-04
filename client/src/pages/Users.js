@@ -197,7 +197,7 @@ const Users = () => {
                             <td>{user.surname}</td>
                             <td>{user.login}</td>
                             <td>{user.role}</td>
-                            <td><button onClick={() => handleDelUser(user.login)}>Удалить</button> <button onClick={() => openEditModal(user)}>Изменить</button></td>
+                            <td><button onClick={() => openEditModal(user)}>Изменить</button> <button onClick={() => handleDelUser(user.login)}>Удалить</button></td>
                         </tr>
                     ))}</tbody></table>)}
 
