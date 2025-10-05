@@ -1,9 +1,10 @@
 import { useState, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import "../styles/modal.css"
 
 
-const Lectures = () => {
+const Lessons = () => {
     const [showModal, setShowModal] = useState(false);
     const [showModalEdit, setShowModalEdit] = useState(false);
     const [bookmark, setBookmark] = useState("lecture");
@@ -13,6 +14,8 @@ const Lectures = () => {
     const [lessons, setLessons] = useState([]);
     const [lessonEdit, setLessonEdit] = useState([]);
     const [typeTest, setTypeTest] = useState("");
+    const [priority, setPriority] = useState(1);
+    const navigate = useNavigate();
 
     useEffect(() => {
         getLessons();
@@ -55,6 +58,7 @@ const Lectures = () => {
         setLectureText("");
         setQuestions([]);
         setTypeTest("");
+        setPriority(1);
     };
 
     const changeModal = (name) => {
@@ -117,6 +121,7 @@ const Lectures = () => {
         }
         setLectureName(lesson.name);
         setQuestions(lesson.data.questions);
+        setPriority(lesson.priority);
     };
 
     const closeModalEdit = () => {
@@ -127,12 +132,13 @@ const Lectures = () => {
         setQuestions([]);
         setLessonEdit([]);
         setTypeTest("");
+        setPriority(1);
     };
 
     const hundleAdd = async (type) => {
         if (typeTest === "Итоговый тест") type = "finaltest";
 
-        if (typeTest.length === 0) {
+        if (typeTest.length === 0 && type !== "lecture") {
             alert("Выберите тип теста!");
             return;
         } else if (lectureName.length === 0) {
@@ -173,6 +179,7 @@ const Lectures = () => {
                 response = await axios.post("http://localhost:5000/lessons/lecture", {
                     lectureName: lectureName,
                     lectureText: lectureText,
+                    lecturePriority: priority,
                     questions: questions.map(q => ({
                         text: q.text,
                         explanation: q.explanation,
@@ -185,6 +192,7 @@ const Lectures = () => {
             } else if (type === "test") {
                 response = await axios.post("http://localhost:5000/lessons/test", {
                     testName: lectureName,
+                    testPriority: priority,
                     questions: questions.map(q => ({
                         text: q.text,
                         answers: q.answers.map(a => ({
@@ -222,7 +230,7 @@ const Lectures = () => {
     };
 
     const handleEdit = async () => {
-        lessonEdit.type = typeTest;
+        if (typeTest.length !== 0) lessonEdit.type = typeTest;
 
         if (lectureName.length === 0) {
             alert("Введите название!");
@@ -265,6 +273,7 @@ const Lectures = () => {
                     id: lessonEdit.id,
                     name: lectureName,
                     text: lectureText,
+                    priority: priority,
                     questions: questions.map(q => ({
                         text: q.text,
                         explanation: q.explanation,
@@ -278,6 +287,7 @@ const Lectures = () => {
                 response = await axios.put("http://localhost:5000/lessons/test", {
                     id: lessonEdit.id,
                     name: lectureName,
+                    priority: priority,
                     questions: questions.map(q => ({
                         text: q.text,
                         answers: q.answers.map(a => ({
@@ -347,6 +357,8 @@ const Lectures = () => {
                             <div className="lecture">
                                 <b>Лекция</b><br/>
                                 Название: <input type="text" value={lectureName} onChange={(e) => setLectureName(e.target.value)}/><br/>
+                                Приоритет: <input type="number" min="1" value={priority} onChange={(e) => setPriority(Number(e.target.value))}/><br/>
+
                                 Текст:<br/><textarea className="lecture-text" value={lectureText} onChange={(e) => setLectureText(e.target.value)}/><br/><br/>
 
                                 <b>Тест</b> <button onClick={() => addQuestion()}>Добавить вопрос</button>
@@ -400,7 +412,8 @@ const Lectures = () => {
                                 <b>Тест</b><br/>
                                 <input type="radio" value="Тест" checked={typeTest === "Тест"} onChange={(e) => setTypeTest(e.target.value)}/>Обычный тест { }
                                 <input type="radio" value="Итоговый тест" checked={typeTest === "Итоговый тест"} onChange={(e) => setTypeTest(e.target.value)}/>Итоговый тест<br/>
-                                Название: <input type="text" value={lectureName} onChange={(e) => setLectureName(e.target.value)}/><br/><br/>
+                                Название: <input type="text" value={lectureName} onChange={(e) => setLectureName(e.target.value)}/><br/>
+                                Приоритет: <input type="number" min="1" value={priority} onChange={(e) => setPriority(Number(e.target.value))}/><br/><br/>
 
                                 <button onClick={() => addQuestion()}>Добавить вопрос</button><br/>
                                 {questions.map((q, qIndex) => (
@@ -450,12 +463,14 @@ const Lectures = () => {
                 <table border="1" cellPadding="5" cellSpacing="0">
                     <thead><tr>
                         <th>Тип</th>
+                        <th>Приоритет</th>
                         <th>Название</th>
                         <th>Действие</th>
                     </tr></thead>
                     <tbody>{lessons.map((lesson, index) => (
                         <tr key={index}>
                             <td>{lesson.type}</td>
+                            <td>{lesson.priority}</td>
                             <td>{lesson.name}</td>
                             <td><button onClick={() => openModalEdit(lesson)}>Изменить</button> <button onClick={() => handleDel(lesson.id)}>Удалить</button> </td>
                         </tr>
@@ -469,6 +484,7 @@ const Lectures = () => {
                         <div className="lecture">
                             <b>Лекция</b><br/>
                             Название: <input type="text" value={lectureName} onChange={(e) => setLectureName(e.target.value)}/><br/>
+                            Приоритет: <input type="number" min="1" value={priority} onChange={(e) => setPriority(Number(e.target.value))}/><br/>
                             Текст:<br/><textarea className="lecture-text" value={lectureText} onChange={(e) => setLectureText(e.target.value)}/><br/><br/>
 
                             <b>Тест</b> <button onClick={() => addQuestion()}>Добавить вопрос</button>
@@ -522,7 +538,8 @@ const Lectures = () => {
                             <b>Тест</b><br/>
                             <input type="radio" value="Тест" checked={typeTest === "Тест"} onChange={(e) => setTypeTest(e.target.value)}/>Обычный тест { }
                             <input type="radio" value="Итоговый тест" checked={typeTest === "Итоговый тест"} onChange={(e) => setTypeTest(e.target.value)}/>Итоговый тест<br/>
-                            Название: <input type="text" value={lectureName} onChange={(e) => setLectureName(e.target.value)}/><br/><br/>
+                            Название: <input type="text" value={lectureName} onChange={(e) => setLectureName(e.target.value)}/><br/>
+                            Приоритет: <input type="number" min="1" value={priority} onChange={(e) => setPriority(Number(e.target.value))}/><br/><br/>
 
                             <button onClick={() => addQuestion()}>Добавить вопрос</button><br/>
                             {questions.map((q, qIndex) => (
@@ -563,8 +580,10 @@ const Lectures = () => {
                     )}
                 </div>
             )}
+
+            <p><button onClick={() => {navigate('/')}}>Назад</button></p>
         </div>
     );
 };
 
-export default Lectures;
+export default Lessons;

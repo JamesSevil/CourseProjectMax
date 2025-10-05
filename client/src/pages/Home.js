@@ -1,11 +1,15 @@
 import { useState, useEffect } from "react";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
+import axios from "axios";
 
 const Home = () => {
     const [name, setName] = useState("");
     const [surname, setSurname] = useState("");
     const [role, setRole] = useState("");
     const [isOpen, setIsOpen] = useState(false); // состояние для выпадающего меню
+    const [lectures, setLectures] = useState([]);
+    const [tests, setTests] = useState([]);
+    const [finaltests, setFinalTests] = useState([]);
     const navigate = useNavigate();
 
     useEffect(() => {
@@ -17,7 +21,28 @@ const Home = () => {
             setSurname(storedSurname);
             setRole(storedRole);
         }
+        getLessons();
     }, []);
+
+    const getLessons = async () => {
+        try {
+            const response = await axios.get("http://localhost:5000/lessons", {});
+
+            if (response.status === 200 && response.data.success) {
+                const lessons = response.data.lessons;
+                console.log(lessons);
+                setLectures(lessons.filter(l => l.type === "Лекция"));
+                setTests(lessons.filter(l => l.type === "Тест"));
+                setFinalTests(lessons.filter(l => l.type === "Итоговый тест"));
+            } else {
+                console.error("Ошибка при загрузке учебного материала: ", response.data.message);
+                alert(`Не удалось загрузить учебный материал: ${response.data.message}`);
+            }
+        } catch (error) {
+            console.error("Ошибка при загрузке учебного материала: ", error.response.data.message);
+            alert(`Не удалось загрузить учебный материал: ${error.response.data.message}`);
+        }
+    }
 
     const handleLogout = () => {
         sessionStorage.clear();
@@ -34,7 +59,7 @@ const Home = () => {
                 {isOpen && (
                     <div>
                         {role === "Администратор" && (<><button onClick={() => navigate("/users")}>Управление пользователями</button><br/></>)}
-                        {(role === "Администратор" || role === "Преподаватель") && (<><button onClick={() => navigate("/lectures")}>Управление лекциями</button><br/></>)}
+                        {(role === "Администратор" || role === "Преподаватель") && (<><button onClick={() => navigate("/lessons")}>Управление лекциями</button><br/></>)}
                         <button onClick={() => {
                             setIsOpen(false);
                             navigate("/profile");
@@ -44,11 +69,24 @@ const Home = () => {
                 )}
             </div>
             
-            <h1>LearnProgaMixas</h1>
+            <h2>LearnProgaMixas</h2>
             <h4>С нами легко!</h4>
             <hr></hr>
 
-            <h3>Список лекций</h3>
+            <b>Лекции</b><br/>
+            {lectures.map(l => (
+                <div><Link to={`/lesson/${l.id}`}>{l.name}</Link></div>
+            ))}<br/><hr></hr>
+
+            <b>Тесты</b><br/>
+            {tests.map(t => (
+                    <div><Link to={`/lesson/${t.id}`}>{t.name}</Link></div>
+            ))}<br/><hr></hr>
+
+            <b>Итоговое тестирование</b><br/>
+            {finaltests.map(ft => (
+                <div><Link to={`/lesson/${ft.id}`}>{ft.name}</Link></div>
+            ))}<br/>
         </div>
     );
 };

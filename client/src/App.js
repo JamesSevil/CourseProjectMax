@@ -3,7 +3,7 @@ import Home from "./pages/Home";
 import Login from "./pages/Login";
 import Profile from "./pages/Profile";
 import Users from "./pages/Users";
-import Lectures from "./pages/Lectures";
+import Lessons from "./pages/Lessons";
 import PrivateRoute from "./PrivateRoute";
 
 const App = () => {
@@ -14,7 +14,7 @@ const App = () => {
                 <Route path="/" element={<PrivateRoute><Home/></PrivateRoute>}/>
                 <Route path="/profile" element={<PrivateRoute><Profile/></PrivateRoute>}/>
                 <Route path="/users" element={<PrivateRoute roles={"Администратор"}><Users/></PrivateRoute>}/>
-                <Route path="/lectures" element={<PrivateRoute roles={["Администратор", "Преподаватель"]}><Lectures/></PrivateRoute>}/>
+                <Route path="/lessons" element={<PrivateRoute roles={["Администратор", "Преподаватель"]}><Lessons/></PrivateRoute>}/>
             </Routes>
         </Router>
     );
