@@ -51,7 +51,7 @@ const Lesson = () => {
         }
 
         try {
-            const response = await axios.post(`http://localhost:5000/lessons/savetest`, {
+            const response = await axios.post(`http://localhost:5000/progress/savetest`, {
                 login: login,
                 lessonid: id,
                 answers: answers
