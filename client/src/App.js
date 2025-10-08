@@ -4,6 +4,7 @@ import Login from "./pages/Login";
 import Profile from "./pages/Profile";
 import Users from "./pages/Users";
 import Lessons from "./pages/Lessons";
+import Lesson from "./pages/Lesson";
 import PrivateRoute from "./PrivateRoute";
 
 const App = () => {
@@ -13,6 +14,7 @@ const App = () => {
                 <Route path="/login" element={<Login/>}/>
                 <Route path="/" element={<PrivateRoute><Home/></PrivateRoute>}/>
                 <Route path="/profile" element={<PrivateRoute><Profile/></PrivateRoute>}/>
+                <Route path="/lesson/:id" element={<PrivateRoute><Lesson/></PrivateRoute>}/>
                 <Route path="/users" element={<PrivateRoute roles={"Администратор"}><Users/></PrivateRoute>}/>
                 <Route path="/lessons" element={<PrivateRoute roles={["Администратор", "Преподаватель"]}><Lessons/></PrivateRoute>}/>
             </Routes>

@@ -15,6 +15,7 @@ const Lessons = () => {
     const [lessonEdit, setLessonEdit] = useState([]);
     const [typeTest, setTypeTest] = useState("");
     const [priority, setPriority] = useState(1);
+    const [attempts, setAttempts] = useState(1);
     const navigate = useNavigate();
 
     useEffect(() => {
@@ -147,6 +148,9 @@ const Lessons = () => {
         } else if (!lectureText.trim() && type === "lecture") {
             alert("Заполните текст лекции!");
             return;
+        } else if (priority <= 0 || attempts <= 0) {
+            alert("Приоритет не может быть меньше 1!");
+            return;
         }
         for (let i = 0; i < questions.length; i++) {
             const q = questions[i];
@@ -237,6 +241,9 @@ const Lessons = () => {
             return;
         } else if (!lectureText.trim() && lessonEdit.type === "Лекция") {
             alert("Заполните текст лекции!");
+            return;
+        } else if (priority <= 0) {
+            alert("Приоритет не может быть меньше 1!");
             return;
         }
         for (let i = 0; i < questions.length; i++) {

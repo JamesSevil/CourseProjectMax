@@ -273,4 +273,94 @@ router.put("/finaltest", async (req, res) => {
     }
 });
 
+router.get("/:id", async (req, res) => {
+    const id = req.params.id;
+
+    try {
+        const result = await pool.query(
+            `SELECT lt.type, l.name, l.encrypted_data
+            FROM lessons l
+            JOIN lessonstype lt ON l.type_id = lt.id
+            WHERE l.id = $1`,
+            [id]
+        );
+
+        const [iv, encryptedData] = result.rows[0].encrypted_data.split(":");
+        const decrypted = crypt.decrypt(encryptedData, iv);
+        const data = JSON.parse(decrypted);
+        const lesson = {
+            type: result.rows[0].type,
+            name: result.rows[0].name,
+            data: data
+        };
+
+        res.status(200).json({success: true, message: "Учебный материал успешно загружен!", lesson: lesson});
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({success: false, message: "Ошибка сервера!"});
+    }
+});
+
+router.post("/savetest", async (req, res) => {
+    const { login, lessonid, answers } = req.body;
+
+    try {
+        let result = await pool.query(
+            `SELECT encrypted_data FROM lessons WHERE id = $1`,
+            [lessonid]
+        );
+        const [iv, encryptedData] = result.rows[0].encrypted_data.split(":");
+        const decrypted = crypt.decrypt(encryptedData, iv);
+        const data = JSON.parse(decrypted);
+        const questions = data.questions;
+
+        let errors = [];
+        answers.forEach(userAnswer => {
+            const question = questions.find(q => q.text === userAnswer.question);
+            const correctAnswer = question.answers.find(a => a.isCorrect);
+            if (userAnswer.answer !== correctAnswer.text) {
+                errors.push({
+                    question: question.text,
+                    userAnswer: userAnswer.answer,
+                    correctAnswer: correctAnswer.text,
+                    explanation: question.explanation
+                });
+            }
+        });
+
+        if (errors.length === 0) {
+            result = await pool.query(
+                "SELECT * FROM student_progress WHERE lesson_id = $1",
+                [lessonid]
+            );
+            await pool.query(
+                `INSERT INTO student_progress VALUES 
+                (DEFAULT, (SELECT id FROM users WHERE login = $1), $2, $3, $4, 0, 100, true)`,
+                [login, lessonid, answers.length, answers.length]
+            );
+
+            return res.status(200).json({success: true, message: "Нет ошибок!"});
+        } else {
+            const totalQuestions = questions.length;
+            const incorrectAnswers = errors.length;
+            const correctAnswers = totalQuestions - incorrectAnswers;
+            const percent = (correctAnswers / totalQuestions) * 100;
+            const passed = percent >= 70;
+
+            if (passed) {
+                await pool.query(
+                    `INSERT INTO student_progress VALUES 
+                    (DEFAULT, (SELECT id FROM users WHERE login = $1), $2, $3, $4, 0, 100, true)`,
+                    [login, lessonid, answers.length, answers.length]
+                );
+            }
+
+            return res.status(200).json({success: true, message: "Есть ошибки в тесте!", result: {passed, errors}});
+        }
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({success: false, message: "Ошибка сервера!"});
+    }
+});
+
 export default router;

@@ -10,9 +10,11 @@ const Home = () => {
     const [lectures, setLectures] = useState([]);
     const [tests, setTests] = useState([]);
     const [finaltests, setFinalTests] = useState([]);
+    const [studentprogress, setStudentProgress] = useState([]);
     const navigate = useNavigate();
 
     useEffect(() => {
+        const storedLogin = sessionStorage.getItem("login") || localStorage.getItem("login");
         const storedName = sessionStorage.getItem("name") || localStorage.getItem("name");
         const storedSurname = sessionStorage.getItem("surname") || localStorage.getItem("surname");
         const storedRole = sessionStorage.getItem("role") || localStorage.getItem("role");
@@ -20,6 +22,7 @@ const Home = () => {
             setName(storedName);
             setSurname(storedSurname);
             setRole(storedRole);
+            getStudentProgress(storedLogin);
         }
         getLessons();
     }, []);
@@ -30,7 +33,6 @@ const Home = () => {
 
             if (response.status === 200 && response.data.success) {
                 const lessons = response.data.lessons;
-                console.log(lessons);
                 setLectures(lessons.filter(l => l.type === "Лекция"));
                 setTests(lessons.filter(l => l.type === "Тест"));
                 setFinalTests(lessons.filter(l => l.type === "Итоговый тест"));
@@ -43,6 +45,29 @@ const Home = () => {
             alert(`Не удалось загрузить учебный материал: ${error.response.data.message}`);
         }
     }
+
+    const getStudentProgress = async (login) => {
+        try {
+            const response = await axios.get(`http://localhost:5000/progress/${login}`);
+
+            if (response.status === 200 && response.data.success) {
+                setStudentProgress(response.data.lessons);
+            } else {
+                console.error("Ошибка при загрузке прогресса: ", response.data.message);
+                alert(`Не удалось загрузить прогресс: ${response.data.message}`);
+            }
+        } catch (error) {
+            console.error("Ошибка при загрузке прогресса: ", error.response.data.message);
+            alert(`Не удалось загрузить прогресс: ${error.response.data.message}`);
+        }
+    };
+
+    const handleClick = (e, passed) => {
+        if (passed) {
+            e.preventDefault();
+            alert("Эта лекция уже пройдена!"); 
+        }
+    };
 
     const handleLogout = () => {
         sessionStorage.clear();
@@ -74,9 +99,19 @@ const Home = () => {
             <hr></hr>
 
             <b>Лекции</b><br/>
-            {lectures.map(l => (
-                <div><Link to={`/lesson/${l.id}`}>{l.name}</Link></div>
-            ))}<br/><hr></hr>
+            {lectures.map(l => {
+                const progress = studentprogress.find(p => p.id === l.id);
+                return (
+                    <div key={l.id}>
+                        <Link to={`/lesson/${l.id}`} onClick={(e) => handleClick(e, progress.passed)}>{l.name}</Link> { }
+                        {progress 
+                            ? `[${progress.passed ? "Пройдена" : "Не пройдена"}]` 
+                            : "[Не пройдена]"
+                        }
+                    </div>
+                );
+            })}<br/><hr/>
+
 
             <b>Тесты</b><br/>
             {tests.map(t => (
