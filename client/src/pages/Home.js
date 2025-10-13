@@ -62,12 +62,35 @@ const Home = () => {
         }
     };
 
-    const handleClick = (e, passed) => {
-        if (passed) {
+    const handleClick = (e, passed, type) => {
+        if (type === "Лекция" && passed) {
             e.preventDefault();
-            alert("Эта лекция уже пройдена!"); 
+            alert("Эта лекция уже пройдена!");
+            return;
+        }
+
+        if (type === "Тест") {
+            // фильтруем все лекции заново прямо в момент клика
+            const unpassedLectures = lectures.filter(l => {
+                const lp = studentprogress.find(p => String(p.id) === String(l.id));
+                return !lp || !lp.passed; // нет прогресса или не пройдена
+            });
+
+            if (unpassedLectures.length > 0) {
+                e.preventDefault();
+                alert("Вы не можете пройти тест, пока не пройдены все лекции!");
+                return;
+            }
+
+            if (passed) {
+                e.preventDefault();
+                alert("Этот тест уже пройден!");
+                return;
+            }
         }
     };
+
+
 
     const handleLogout = () => {
         sessionStorage.clear();
@@ -103,7 +126,7 @@ const Home = () => {
                 const progress = studentprogress.find(p => p.id === l.id);
                 return (
                     <div key={l.id}>
-                        <Link to={`/lesson/${l.id}`} onClick={(e) => handleClick(e, progress.passed)}>{l.name}</Link> { }
+                        <Link to={`/lesson/${l.id}`} onClick={(e) => handleClick(e, progress.passed, "Лекция")}>{l.name}</Link> { }
                         {progress 
                             ? `[${progress.passed ? "Пройдена" : "Не пройдена"}]` 
                             : "[Не пройдена]"
@@ -113,10 +136,19 @@ const Home = () => {
             })}<br/><hr/>
 
 
-            <b>Тесты</b><br/>
-            {tests.map(t => (
-                    <div><Link to={`/lesson/${t.id}`}>{t.name}</Link></div>
-            ))}<br/><hr></hr>
+            <b>Лекции</b><br/>
+            {tests.map(t => {
+                const progress = studentprogress.find(p => p.id === t.id);
+                return (
+                    <div key={t.id}>
+                        <Link to={`/lesson/${t.id}`} onClick={(e) => handleClick(e, progress?.passed, "Тест")}>{t.name}</Link> { }
+                        {progress 
+                            ? progress.passed ? "[Пройден]" : `[Не пройден] [Попытки: ${progress.attempts}]`
+                            : "[Не пройден] [Попытки: 3]"
+                        }
+                    </div>
+                );
+            })}<br/><hr/>
 
             <b>Итоговое тестирование</b><br/>
             {finaltests.map(ft => (

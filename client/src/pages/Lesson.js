@@ -51,11 +51,20 @@ const Lesson = () => {
         }
 
         try {
-            const response = await axios.post(`http://localhost:5000/progress/savetest`, {
-                login: login,
-                lessonid: id,
-                answers: answers
-            });
+            let response;
+            if (lesson.type === "Лекция") {
+                response = await axios.post(`http://localhost:5000/progress/savelecture`, {
+                    login: login,
+                    lessonid: id,
+                    answers: answers
+                });
+            } else if (lesson.type === "Тест") {
+                response = await axios.post(`http://localhost:5000/progress/savetest`, {
+                    login: login,
+                    lessonid: id,
+                    answers: answers
+                });
+            }
 
             if (response.status === 200 && response.data.success) {
                 if (response.data.message === "Нет ошибок!") {
@@ -93,21 +102,51 @@ const Lesson = () => {
             </div>
         )}
 
+        {lesson.type === "Тест" && (
+            <div className="test">
+                <b>Тест:</b><br/>
+                {lesson.data.questions.map((q, i) => (
+                    <p>{i + 1}. {q.text}
+                    {q.answers?.map((a, j) => (
+                        <label><br/><input type="radio" name={`q${i}`} value={a.text} checked={answers[i]?.answer === a.text} onChange={() => handleAnswerChange(i, q.text, a.text)}/>{a.text}</label>
+                    ))}</p>
+                ))}
+            </div>
+        )}
+
         <button onClick={() => hundleSave()}>Закончить тестирование</button>
 
         {showModal && (
             <div className="modal">
-                {result.passed ? (<p><h3>Тест пройден с ошибками!</h3></p>) : 
-                (<h3>Тест не пройден!</h3>)}
+                {lesson.type === "Лекция" && (
+                    <div className="lecture">
+                        {result.passed ? (<p><h3>Тест пройден с ошибками!</h3></p>) : 
+                        (<h3>Тест не пройден!</h3>)}
+                        {result.errors.map((err, index) => (
+                            <p>
+                                <b>Вопрос: </b> {err.question}<br/>
+                                <b>Ваш ответ: </b> {err.userAnswer}<br/>
+                                <b>Правильный ответ: </b> {err.correctAnswer}<br/>
+                                <b>Пояснение: </b> {err.explanation}<br/>
+                            </p>
+                        ))}
+                    </div>
+                )}
 
-                {result.errors.map((err, index) => (
-                    <p>
-                        <b>Вопрос: </b> {err.question}<br/>
-                        <b>Ваш ответ: </b> {err.userAnswer}<br/>
-                        <b>Правильный ответ: </b> {err.correctAnswer}<br/>
-                        <b>Пояснение: </b> {err.explanation}<br/>
-                    </p>
-                ))}
+                {lesson.type === "Тест" && (
+                    <div className="test">
+                        {result.passed ? (<p><h3>Тест пройден с ошибками!</h3></p>) : 
+                        (<h3>Тест не пройден!</h3>)}
+
+                        {result.errors.map((err, index) => (
+                            <p>
+                                <b>Вопрос: </b> {err.question}<br/>
+                                <b>Ваш ответ: </b> {err.userAnswer}<br/>
+                                <b>Правильный ответ: </b> {err.correctAnswer}<br/>
+                            </p>
+                        ))}
+                    </div>
+                )}
 
                 <button onClick={() => navigate("/")}>Вернуться на главную страницу</button>
             </div>
