@@ -5,6 +5,7 @@ import Profile from "./pages/Profile";
 import Users from "./pages/Users";
 import Lessons from "./pages/Lessons";
 import Lesson from "./pages/Lesson";
+import Statistics from "./pages/Statistics";
 import PrivateRoute from "./PrivateRoute";
 
 const App = () => {
@@ -17,6 +18,7 @@ const App = () => {
                 <Route path="/lesson/:id" element={<PrivateRoute><Lesson/></PrivateRoute>}/>
                 <Route path="/users" element={<PrivateRoute roles={"Администратор"}><Users/></PrivateRoute>}/>
                 <Route path="/lessons" element={<PrivateRoute roles={["Администратор", "Преподаватель"]}><Lessons/></PrivateRoute>}/>
+                <Route path="/statistics" element={<PrivateRoute roles={["Администратор", "Преподаватель"]}><Statistics/></PrivateRoute>}/>
             </Routes>
         </Router>
     );

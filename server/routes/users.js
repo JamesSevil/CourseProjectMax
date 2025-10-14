@@ -161,4 +161,17 @@ router.put("/", async (req, res) => {
     }
 });
 
+router.get("/students", async (req, res) => {
+    try {
+        const result = await pool.query(
+            "SELECT name, surname FROM users WHERE role_id = (SELECT id FROM usersrole WHERE role = 'Студент')"
+        );
+
+        res.status(200).json({success: true, message: "Пользователи успешно загружены!", users: result.rows});
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({success: false, message: "Ошибка сервера!"});
+    }
+});
+
 export default router;

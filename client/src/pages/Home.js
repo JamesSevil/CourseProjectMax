@@ -204,64 +204,86 @@ const Home = () => {
                 {isOpen && (
                     <div>
                         {role === "Администратор" && (<><button onClick={() => navigate("/users")}>Управление пользователями</button><br/></>)}
-                        {(role === "Администратор" || role === "Преподаватель") && (<><button onClick={() => navigate("/lessons")}>Управление лекциями</button><br/></>)}
+                        {(role === "Администратор" || role === "Преподаватель") && (<><button onClick={() => navigate("/lessons")}>Управление материалом</button><br/></>)}
                         <button onClick={() => {
                             setIsOpen(false);
                             navigate("/profile");
                         }}>Личный кабинет</button><br/>
+                        {(role === "Администратор" || role === "Преподаватель") && (<><button onClick={() => navigate("/statistics")}>Статистика</button><br/></>)}
                         <button onClick={handleLogout}>Выйти</button>
                     </div>
                 )}
             </div>
-            
             <h2>LearnProgaMixas</h2>
             <h4>С нами легко!</h4>
             <hr></hr>
-                <b>Лекции</b><br/>
-                {lectures.map(l => {
-                    const progress = studentprogress.find(p => p.id === l.id);
-                    return (
-                        <div key={l.id}>
-                            <Link to={`/lesson/${l.id}`} onClick={(e) => handleClick(e, progress?.passed, "Лекция", l.id)}>{l.name}</Link> { }
-                            {progress 
-                                ? `[${progress.passed ? "Пройдена" : "Не пройдена"}]` 
-                                : "[Не пройдена]"
-                            }
-                        </div>
-                    );
-                })}<br/><hr/>
+
+            {role === "Студент" ?
+                <div> 
+                    <b>Лекции</b><br/>
+                    {lectures.map(l => {
+                        const progress = studentprogress?.find(p => p.id === l.id);
+                        return (
+                            <div key={l.id}>
+                                <Link to={`/lesson/${l.id}`} onClick={(e) => handleClick(e, progress?.passed, "Лекция", l.id)}>{l.name}</Link> { }
+                                {progress 
+                                    ? `[${progress.passed ? "Пройдена" : "Не пройдена"}]` 
+                                    : "[Не пройдена]"
+                                }
+                            </div>
+                        );
+                    })}<br/><hr/>
 
 
-                <b>Тесты</b><br/>
-                {tests.map(t => {
-                    const progress = studentprogress.find(p => p.id === t.id);
-                    return (
-                        <div key={t.id}>
-                            <Link to={`/lesson/${t.id}`} onClick={(e) => handleClick(e, progress?.passed, "Тест", t.id)}>{t.name}</Link> { }
-                            {progress 
-                                ? progress.passed ? "[Пройден]" : `[Не пройден] [Попытки: ${progress.attempts}]`
-                                : "[Не пройден] [Попытки: 3]"
-                            }
-                        </div>
-                    );
-                })}<br/><hr/>
+                    <b>Тесты</b><br/>
+                    {tests.map(t => {
+                        const progress = studentprogress?.find(p => p.id === t.id);
+                        return (
+                            <div key={t.id}>
+                                <Link to={`/lesson/${t.id}`} onClick={(e) => handleClick(e, progress?.passed, "Тест", t.id)}>{t.name}</Link> { }
+                                {progress 
+                                    ? progress?.passed ? "[Пройден]" : `[Не пройден] [Попытки: ${progress.attempts}]`
+                                    : "[Не пройден] [Попытки: 3]"
+                                }
+                            </div>
+                        );
+                    })}<br/><hr/>
 
-                <b>Итоговое тестирование</b><br/>
-                {finaltests.map(ft => {
-                    const progress = studentprogress.find(p => p.id === ft.id);
-                    return (
-                        <div>
-                            <Link to={`/lesson/${ft.id}`} onClick={(e) => handleClick(e, progress?.passed, "Итоговый тест", ft.id)}>{ft.name}</Link> { }
-                            {progress 
-                                ? progress.passed ? "[Пройден]" : "[Не пройден]"
-                                : "[Не пройдено]"
-                            }
-                            {progress.passed && (
-                                <p><button onClick={() => hundleDownload(ft.id)}>Скачать сертификат</button></p>
-                            )}
-                        </div>
-                    )
-                })}<br/>
+                    <b>Итоговое тестирование</b><br/>
+                    {finaltests.map(ft => {
+                        const progress = studentprogress?.find(p => p.id === ft.id);
+                        return (
+                            <div>
+                                <Link to={`/lesson/${ft.id}`} onClick={(e) => handleClick(e, progress?.passed, "Итоговый тест", ft.id)}>{ft.name}</Link> { }
+                                {progress 
+                                    ? progress.passed ? "[Пройден]" : "[Не пройден]"
+                                    : "[Не пройдено]"
+                                }
+                                {progress?.passed && (
+                                    <p><button onClick={() => hundleDownload(ft.id)}>Скачать сертификат</button></p>
+                                )}
+                            </div>
+                        )
+                    })}<br/>
+                </div>
+            : 
+                <div> 
+                    <b>Лекции</b><br/>
+                    {lectures.map(l => (
+                        <label>{l.name}<br/></label>    
+                    ))}<br/><hr/>
+
+                    <b>Тесты</b><br/>
+                    {tests.map(t => (
+                        <label>{t.name}<br/></label>    
+                    ))}<br/><hr/>
+
+                    <b>Итоговое тестирование</b><br/>
+                    {finaltests.map(ft => (
+                        <label>{ft.name}<br/></label>    
+                    ))}<br/>
+                </div>
+            }     
         </div>
     );
 };
