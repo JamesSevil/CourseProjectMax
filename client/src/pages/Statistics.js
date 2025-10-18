@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
+import "../styles/statistics.css";
 
 const Statistics = () => {
     const [users, setUsers] = useState([]);
@@ -106,7 +107,7 @@ const Statistics = () => {
                         zIndex: 1000}}>
                         <b>Прогресс студента</b><br/><br/><hr></hr>
                         <div> 
-                            <b>Лекции</b><br/>
+                            <b>Лекции</b>
                             {lectures.map(l => {
                                 const progress = studentprogress?.find(p => p.id === l.id);
                                 return (
@@ -118,9 +119,9 @@ const Statistics = () => {
                                         }
                                     </div>
                                 );
-                            })}<br/><hr/>
+                            })}<hr/>
 
-                            <b>Тесты</b><br/>
+                            <b>Тесты</b>
                             {tests.map(t => {
                                 const progress = studentprogress?.find(p => p.id === t.id);
                                 return (
@@ -132,9 +133,9 @@ const Statistics = () => {
                                         }
                                     </div>
                                 );
-                            })}<br/><hr/>
+                            })}<hr/>
 
-                            <b>Итоговое тестирование</b><br/>
+                            <b>Итоговое тестирование</b>
                             {finaltests.map(ft => {
                                 const progress = studentprogress?.find(p => p.id === ft.id);
                                 return (
@@ -146,7 +147,7 @@ const Statistics = () => {
                                         }
                                     </div>
                                 )
-                            })}<br/>
+                            })}
                             <button onClick={() => setShowModal(false)}>Закрыть статистику</button>
                         </div>
                     </div>

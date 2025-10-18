@@ -1,0 +1,124 @@
+/* ===== Общие настройки ===== */
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+body {
+    background-color: #f4f6f8;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    color: #333;
+}
+
+/* ===== Контейнер профиля ===== */
+.profile {
+    max-width: 600px;
+    margin: 80px auto;
+    padding: 40px;
+    background-color: #fff;
+    border-radius: 10px;
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1);
+    text-align: center;
+}
+
+.profile b {
+    color: #007BFF;
+    font-size: 18px;
+}
+
+.profile p {
+    margin: 10px 0;
+}
+
+/* ===== Заголовки секций ===== */
+.changeinformation b,
+.changepassword b {
+    display: block;
+    font-size: 17px;
+    color: #333;
+    margin-bottom: 15px;
+}
+
+/* ===== Блоки редактирования ===== */
+.changeinformation,
+.changepassword {
+    margin-top: 30px;
+    padding: 25px;
+    background-color: #fafafa;
+    border-radius: 8px;
+    border: 1px solid #eee;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
+    transition: box-shadow 0.3s;
+    text-align: left;
+}
+
+.changeinformation:hover,
+.changepassword:hover {
+    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.08);
+}
+
+/* ===== Поля ввода ===== */
+.input {
+    margin-bottom: 15px;
+}
+
+.input input {
+    width: 100%;
+    padding: 10px 14px;
+    border: 1px solid #ccc;
+    border-radius: 6px;
+    font-size: 15px;
+    transition: border-color 0.3s;
+}
+
+.input input:focus {
+    border-color: #007BFF;
+    outline: none;
+}
+
+/* ===== Кнопки ===== */
+.profile button {
+    display: block;
+    width: 100%;
+    padding: 12px;
+    margin-top: 10px;
+    background-color: #007BFF;
+    border: none;
+    border-radius: 6px;
+    color: #fff;
+    font-size: 16px;
+    cursor: pointer;
+    transition: background-color 0.3s, transform 0.1s;
+}
+
+.profile button:hover {
+    background-color: #0056b3;
+    transform: scale(1.02);
+}
+
+/* ===== Кнопка "Назад" ===== */
+.profile p button {
+    background-color: #6c757d;
+}
+
+.profile p button:hover {
+    background-color: #5a6268;
+}
+
+/* ===== Адаптивность ===== */
+@media (max-width: 600px) {
+    .profile {
+        padding: 25px;
+        margin: 40px 15px;
+    }
+
+    .changeinformation,
+    .changepassword {
+        padding: 20px;
+    }
+
+    .profile button {
+        font-size: 15px;
+    }
+}

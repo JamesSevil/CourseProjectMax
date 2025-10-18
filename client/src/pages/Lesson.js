@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import axios from "axios";
-import "../styles/modal.css"
+import "../styles/lesson.css";
 
 const Lesson = () => {
     const [login, setLogin] = useState("");
@@ -180,7 +180,7 @@ const Lesson = () => {
         {lesson.type === "Лекция" && (
             <div className="lecture">
                 <b>{lesson.name}</b><br/>
-                <p style={{ whiteSpace: "pre-wrap" }}>{lesson.data.lecture}</p>
+                <label style={{ whiteSpace: "pre-wrap" }}>{lesson.data.lecture}</label>
                 <hr></hr>
 
                 <b>Тест:</b><br/>

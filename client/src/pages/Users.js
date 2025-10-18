@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
+import "../styles/users.css";
 
 const Users = () => {
     const [login, setLogin] = useState("");
@@ -165,21 +166,21 @@ const Users = () => {
     return (
         <div className="admin">
             <div className="adduser">
-                <b>Добавление нового пользователя</b><br/>
+                <b>Добавление нового пользователя</b>
                 <div className="input">
-                    <input type="text" value={login} placeholder="Логин" onChange={(e) => setLogin(e.target.value)}/><br/>
-                    <input type="password" value={password} placeholder="Пароль" onChange={(e) => setPassword(e.target.value)}/><br/>
-                    <input type="password" value={confirmPassword} placeholder="Подтверждение пароля" onChange={(e) => setConfirmPassword(e.target.value)}/><br/>
-                    <input type="text" value={name} placeholder="Имя" onChange={(e) => setName(e.target.value)}/><br/>
-                    <input type="text" value={surname} placeholder="Фамилия" onChange={(e) => setSurname(e.target.value)}/><br/>
+                    <input type="text" value={login} placeholder="Логин" onChange={(e) => setLogin(e.target.value)}/>
+                    <input type="password" value={password} placeholder="Пароль" onChange={(e) => setPassword(e.target.value)}/>
+                    <input type="password" value={confirmPassword} placeholder="Подтверждение пароля" onChange={(e) => setConfirmPassword(e.target.value)}/>
+                    <input type="text" value={name} placeholder="Имя" onChange={(e) => setName(e.target.value)}/>
+                    <input type="text" value={surname} placeholder="Фамилия" onChange={(e) => setSurname(e.target.value)}/>
                     <label><input type="radio" value="Преподаватель" checked={role === "Преподаватель"} onChange={(e) => setRole(e.target.value)}/>Преподаватель</label>
-                    <label><input type="radio" value="Студент" checked={role === "Студент"} onChange={(e) => setRole(e.target.value)}/>Студент</label><br/>
+                    <label><input type="radio" value="Студент" checked={role === "Студент"} onChange={(e) => setRole(e.target.value)}/>Студент</label>
                 </div>
                 <button onClick={handleAddUser}>Добавить</button><br/><br/>
             </div>
 
             <div className="tableusers">
-                <b>Список пользователей</b><br/>
+                <b>Список пользователей</b>
                 {users.length === 0 ? (
                     <p>Пользователи не найдены</p>
                 ) : (
@@ -202,28 +203,24 @@ const Users = () => {
                     ))}</tbody></table>)}
 
                     {editingUser && (
-                        <div className="modal" style={{
-                            position: "fixed",
-                            top: "50%",
-                            left: "50%",
-                            transform: "translate(-50%, -50%)",
-                            backgroundColor: "white",
-                            padding: "20px",
-                            border: "1px solid black",
-                            zIndex: 1000}}>
-                            <b>Редактирование пользователя</b><br/>
-                            <input type="text" value={editLogin} placeholder="Логин" onChange={(e) => setEditLogin(e.target.value)}/><br/>
-                            <input type="password" value={editPassword} placeholder="Пароль" onChange={(e) => setEditPassword(e.target.value)}/><br/>
-                            <input type="password" value={editConfirmPassword} placeholder="Подтверждение пароля" onChange={(e) => setEditConfirmPassword(e.target.value)}/><br/>
-                            <input type="text"value={editName} placeholder="Имя" onChange={(e) => setEditName(e.target.value)}/><br/>
-                            <input type="text" value={editSurname} placeholder="Фамилия" onChange={(e) => setEditSurname(e.target.value)}/><br/>
-                            <label><input type="radio" value="Преподаватель" checked={editRole === "Преподаватель"} onChange={(e) => setEditRole(e.target.value)}/>Преподаватель</label>
-                            <label><input type="radio" value="Студент" checked={editRole === "Студент"} onChange={(e) => setEditRole(e.target.value)}/>Студент</label><br/>
-                            <button onClick={() => handleSaveChanges(editingUser)}>Сохранить</button>
-                            <button onClick={() => setEditingUser(null)}>Отмена</button>
+                        <div className="modal">
+                            <b>Редактирование пользователя</b>
+                            <input type="text" value={editLogin} placeholder="Логин" onChange={(e) => setEditLogin(e.target.value)} />
+                            <input type="password" value={editPassword} placeholder="Пароль" onChange={(e) => setEditPassword(e.target.value)} />
+                            <input type="password" value={editConfirmPassword} placeholder="Подтверждение пароля" onChange={(e) => setEditConfirmPassword(e.target.value)} />
+                            <input type="text" value={editName} placeholder="Имя" onChange={(e) => setEditName(e.target.value)} />
+                            <input type="text" value={editSurname} placeholder="Фамилия" onChange={(e) => setEditSurname(e.target.value)} />
+                            <label><input type="radio" value="Преподаватель" checked={editRole === "Преподаватель"} onChange={(e) => setEditRole(e.target.value)} />Преподаватель</label>
+                            <label><input type="radio" value="Студент" checked={editRole === "Студент"} onChange={(e) => setEditRole(e.target.value)} />Студент</label>
+                            
+                            <div className="modal-buttons">
+                                <button onClick={() => handleSaveChanges(editingUser)}>Сохранить</button>
+                                <button onClick={() => setEditingUser(null)}>Отмена</button>
+                            </div>
                         </div>
+
                     )}
-            </div>
+                </div>
 
             <p><button onClick={() => {navigate('/')}}>Назад</button></p>
         </div>

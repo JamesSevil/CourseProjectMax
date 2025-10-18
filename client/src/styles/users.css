@@ -1,0 +1,227 @@
+/* ===== Общие настройки ===== */
+body {
+    background-color: #f5f7fa;
+    font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+    color: #333;
+}
+
+/* ===== Контейнер страницы ===== */
+.admin {
+    max-width: 650px;
+    margin: 80px auto;
+    padding: 40px;
+    background: #fff;
+    border-radius: 16px;
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.08);
+    text-align: center;
+}
+
+/* ===== Заголовок ===== */
+.admin b {
+    display: block;
+    color: #007bff;
+    font-size: 20px;
+    margin-bottom: 25px;
+}
+
+/* ===== Блок добавления пользователя ===== */
+.adduser {
+    background: #fafafa;
+    border-radius: 10px;
+    padding: 30px;
+    margin-bottom: 30px;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
+    text-align: left;
+}
+
+.adduser b {
+    font-size: 16px;
+    color: #111;
+    display: block;
+    margin-bottom: 15px;
+}
+
+/* ===== Поля ввода ===== */
+.input input {
+    width: 100%;
+    padding: 10px 14px;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    font-size: 15px;
+    margin-bottom: 12px;
+    transition: border-color 0.3s;
+}
+
+.input input:focus {
+    border-color: #007bff;
+    outline: none;
+}
+
+/* ===== Радио-кнопки ===== */
+.adduser label {
+    display: inline-flex;
+    align-items: center;
+    margin-right: 15px;
+    font-size: 14px;
+    color: #444;
+}
+
+/* ===== Кнопки ===== */
+.admin button {
+    width: 100%;
+    background-color: #007bff;
+    color: #fff;
+    border: none;
+    border-radius: 8px;
+    padding: 12px;
+    font-size: 15px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: background-color 0.25s, transform 0.1s;
+}
+
+.admin button:hover {
+    background-color: #0066d6;
+    transform: scale(1.02);
+}
+
+/* ===== Кнопка "Назад" ===== */
+.admin p button {
+    background-color: #6c757d;
+    margin-top: 15px;
+}
+
+.admin p button:hover {
+    background-color: #5a6268;
+}
+
+/* ===== Таблица пользователей ===== */
+.tableusers {
+    background: #fafafa;
+    border-radius: 10px;
+    padding: 25px;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
+}
+
+.tableusers b {
+    display: block;
+    margin-bottom: 15px;
+    font-size: 16px;
+    color: #111;
+}
+
+.tableusers table {
+    width: 100%;
+    border-collapse: collapse;
+    text-align: left;
+}
+
+.tableusers th {
+    background: #007bff;
+    color: #fff;
+    font-weight: 600;
+    padding: 10px;
+    border-radius: 4px 4px 0 0;
+}
+
+.tableusers td {
+    padding: 10px;
+    border-bottom: 1px solid #eee;
+    font-size: 14px;
+}
+
+.tableusers tr:hover {
+    background-color: #eef5ff;
+}
+
+/* ===== Кнопки в таблице ===== */
+.tableusers td button {
+    width: auto;
+    padding: 6px 10px;
+    font-size: 13px;
+    border-radius: 6px;
+    margin-right: 5px;
+}
+
+/* ===== Модальное окно ===== */
+.modal {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background: #fff;
+    padding: 25px;
+    border-radius: 16px;
+    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.25);
+    width: 400px;
+    max-height: 80vh;
+    overflow-y: auto;
+    z-index: 1000;
+    text-align: center;
+}
+
+.modal b {
+    color: #007bff;
+    font-size: 17px;
+    margin-bottom: 15px;
+    display: block;
+}
+
+.modal input {
+    width: 100%;
+    padding: 10px 14px;
+    margin-bottom: 10px;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    font-size: 15px;
+}
+
+.modal input:focus {
+    border-color: #007bff;
+}
+
+.modal label {
+    display: inline-block;
+    margin: 6px 10px;
+    color: #444;
+    font-size: 14px;
+}
+
+.modal-buttons {
+    display: flex;
+    justify-content: center;
+    gap: 10px;
+    margin-top: 15px;
+}
+
+.modal button {
+    width: 120px;
+    padding: 10px;
+    font-size: 14px;
+    border-radius: 8px;
+}
+
+/* ===== Фон под модалкой ===== */
+.modal::before {
+    content: "";
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.35);
+    z-index: -1;
+}
+
+/* ===== Адаптив ===== */
+@media (max-width: 600px) {
+    .admin {
+        padding: 25px;
+        margin: 40px 15px;
+    }
+
+    .modal {
+        width: 90%;
+        padding: 20px;
+    }
+}

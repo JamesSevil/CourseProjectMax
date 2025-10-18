@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
+import "../styles/profile.css";
 
 const Profile = () => {
     const [login, setLogin] = useState("");

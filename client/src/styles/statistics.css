@@ -1,0 +1,104 @@
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+.statistics {
+    max-width: 800px;
+    margin: 50px auto;
+    padding: 25px;
+    background-color: #fff;
+    border-radius: 8px;
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
+}
+
+.statistics b {
+    font-size: 18px;
+    color: #333;
+}
+
+.statistics table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 15px;
+}
+
+.statistics th,
+.statistics td {
+    border: 1px solid #ccc;
+    padding: 10px;
+    text-align: left;
+}
+
+.statistics th {
+    background-color: #f5f5f5;
+    color: #333;
+}
+
+.statistics td button {
+    padding: 6px 12px;
+    background-color: #007BFF;
+    color: #fff;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+.statistics td button:hover {
+    background-color: #0056b3;
+}
+
+.statistics .modal {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background-color: white;
+    padding: 25px;
+    border-radius: 8px;
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
+    z-index: 1000;
+    max-width: 500px;
+    width: 90%;
+}
+
+.statistics .modal b {
+    font-size: 16px;
+}
+
+.statistics .modal div {
+    margin-bottom: 10px;
+}
+
+.statistics .modal button {
+    padding: 10px 15px;
+    background-color: #007BFF;
+    color: white;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+    margin-top: 10px;
+}
+
+.statistics .modal button:hover {
+    background-color: #0056b3;
+}
+
+.statistics > button {
+    margin-top: 20px;
+    padding: 10px 15px;
+    background-color: #6c757d;
+    color: white;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+.statistics > button:hover {
+    background-color: #5a6268;
+}

@@ -3,6 +3,7 @@ import { Link, useNavigate } from "react-router-dom";
 import jsPDF from "jspdf";
 import html2canvas from "html2canvas";
 import axios from "axios";
+import "../styles/home.css";
 
 const Home = () => {
     const [name, setName] = useState("");
@@ -220,7 +221,7 @@ const Home = () => {
 
             {role === "Студент" ?
                 <div> 
-                    <b>Лекции</b><br/>
+                    <b>Лекции</b>
                     {lectures.map(l => {
                         const progress = studentprogress?.find(p => p.id === l.id);
                         return (
@@ -232,10 +233,10 @@ const Home = () => {
                                 }
                             </div>
                         );
-                    })}<br/><hr/>
+                    })}<hr/>
 
 
-                    <b>Тесты</b><br/>
+                    <b>Тесты</b>
                     {tests.map(t => {
                         const progress = studentprogress?.find(p => p.id === t.id);
                         return (
@@ -247,9 +248,9 @@ const Home = () => {
                                 }
                             </div>
                         );
-                    })}<br/><hr/>
+                    })}<hr/>
 
-                    <b>Итоговое тестирование</b><br/>
+                    <b>Итоговое тестирование</b>
                     {finaltests.map(ft => {
                         const progress = studentprogress?.find(p => p.id === ft.id);
                         return (
@@ -264,24 +265,24 @@ const Home = () => {
                                 )}
                             </div>
                         )
-                    })}<br/>
+                    })}
                 </div>
             : 
                 <div> 
-                    <b>Лекции</b><br/>
+                    <b>Лекции</b>
                     {lectures.map(l => (
                         <label>{l.name}<br/></label>    
-                    ))}<br/><hr/>
+                    ))}<hr/>
 
-                    <b>Тесты</b><br/>
+                    <b>Тесты</b>
                     {tests.map(t => (
                         <label>{t.name}<br/></label>    
-                    ))}<br/><hr/>
+                    ))}<hr/>
 
-                    <b>Итоговое тестирование</b><br/>
+                    <b>Итоговое тестирование</b>
                     {finaltests.map(ft => (
                         <label>{ft.name}<br/></label>    
-                    ))}<br/>
+                    ))}
                 </div>
             }     
         </div>
