@@ -1,0 +1,32 @@
+services:
+  server:
+    build:
+      context: ./server  
+    container_name: my-server
+    ports:
+      - "5000:5000"  
+    restart: always
+    environment:
+      UID: ${UID:-100001}  
+      GID: ${GID:-100001}  
+    healthcheck:
+      test: ["CMD", "pgrep", "server"]  
+      interval: 30s
+      timeout: 10s
+      retries: 3
+
+  db:
+    image: postgres:17  
+    container_name: db
+    environment:
+      POSTGRES_USER: postgres  
+      POSTGRES_PASSWORD: superparol  
+      POSTGRES_DB: learnprogamixas  
+    ports:
+      - "5434:5432"  
+    volumes:
+      - db_data:/var/lib/postgresql/data  # Сохранение данных
+      - ./db_dump.sql:/docker-entrypoint-initdb.d/db_dump.sql  # Добавление дампа
+
+volumes:
+  db_data:

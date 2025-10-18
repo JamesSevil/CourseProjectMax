@@ -18,7 +18,7 @@ const PORT = 5000;
 
 export const pool = new Pool({
     user: "postgres",
-    host: "localhost",
+    host: "db",
     database: "learnprogamixas",
     password: "superparol",
     port: 5432,
