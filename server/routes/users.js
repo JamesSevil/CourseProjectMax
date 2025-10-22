@@ -164,7 +164,7 @@ router.put("/", async (req, res) => {
 router.get("/students", async (req, res) => {
     try {
         const result = await pool.query(
-            "SELECT name, surname FROM users WHERE role_id = (SELECT id FROM usersrole WHERE role = 'Студент')"
+            "SELECT login, name, surname FROM users WHERE role_id = (SELECT id FROM usersrole WHERE role = 'Студент')"
         );
 
         res.status(200).json({success: true, message: "Пользователи успешно загружены!", users: result.rows});
